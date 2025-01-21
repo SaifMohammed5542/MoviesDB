@@ -1,4 +1,4 @@
-const API_URL = 'http://www.omdbapi.com/'; // Base API URL
+const API_URL = 'https://www.omdbapi.com/'; // Base API URL
 const API_KEY = 'ac92cce9'; // Your API key
 
 // Function to fetch movies from the API
