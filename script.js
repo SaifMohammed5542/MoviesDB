@@ -1,7 +1,6 @@
-const API_URL = 'https://www.omdbapi.com/'; // Base API URL
-const API_KEY = 'ac92cce9'; // Your API key
+const API_URL = 'https://www.omdbapi.com/';
+const API_KEY = 'ac92cce9';
 
-// Function to fetch movies from the API
 async function fetchMovies(searchTerm = "top rated") {
     try {
         const response = await fetch(`${API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchTerm)}`);
@@ -10,7 +9,7 @@ async function fetchMovies(searchTerm = "top rated") {
         if (data.Response === "True") {
             return data.Search.map(movie => ({
                 title: movie.Title,
-                rating: "N/A", // OMDb search doesn't include ratings
+                rating: "N/A",
                 image: movie.Poster !== "N/A" ? movie.Poster : "placeholder-image.jpg",
                 year: movie.Year
             }));
@@ -24,27 +23,10 @@ async function fetchMovies(searchTerm = "top rated") {
     }
 }
 
-// Function to create a movie card
-function createMovieCard(movie) {
-    return `
-        <div class="movie-card">
-            <img src="${movie.image}" alt="${movie.title}">
-            <div class="movie-info">
-                <h3>${movie.title}</h3>
-                <p>${movie.year}</p>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <span>${movie.rating}</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Function to populate movies
-async function populateMovies(searchTerm = "Avengers") {
+async function populateMovies(searchTerm = "") {
     const movieGrid = document.getElementById('movieGrid');
-    movieGrid.innerHTML = '<p>Loading...</p>'; // Show loading message
+    movieGrid.innerHTML = '<p>Loading...</p>';
+
     const movies = await fetchMovies(searchTerm);
     if (movies.length > 0) {
         movieGrid.innerHTML = movies.map(movie => createMovieCard(movie)).join('');
@@ -53,15 +35,11 @@ async function populateMovies(searchTerm = "Avengers") {
     }
 }
 
-// Event listener for the search input
 document.getElementById('search').addEventListener('input', (e) => {
     const searchTerm = e.target.value.trim();
-    if (searchTerm) {
-        populateMovies(searchTerm);
-    }
+    populateMovies(searchTerm);
 });
 
-// Initialize movies when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    populateMovies(); // Fetch default movies on load
+    populateMovies(); // Default movie list
 });
