@@ -14,7 +14,7 @@ async function fetchMovies(searchTerm = "top rated") {
                 year: movie.Year
             }));
         } else {
-            console.error("No movies found:", data.Error);
+            console.error(`No movies found: ${data.Error}`);
             return [];
         }
     } catch (error) {
@@ -22,6 +22,20 @@ async function fetchMovies(searchTerm = "top rated") {
         return [];
     }
 }
+
+function createMovieCard(movie) {
+    return `
+        <div class="movie-card">
+            <img src="${movie.image}" alt="${movie.title}">
+            <div class="movie-info">
+                <h3>${movie.title}</h3>
+                <p>Year: ${movie.year}</p>
+                <p>Rating: ${movie.rating}</p>
+            </div>
+        </div>
+    `;
+}
+
 
 async function populateMovies(searchTerm = "") {
     const movieGrid = document.getElementById('movieGrid');
