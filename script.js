@@ -1,47 +1,28 @@
-const movies = [
-    {
-        title: "The Shawshank Redemption",
-        rating: 9.3,
-        image:"xexsb_512.webp",
-        year: 1994
-    },
-    {
-        title: "The Godfather",
-        rating: 9.2,
-        image: "51DYbDM1TKL._SX300_SY300_QL70_FMwebp_.webp",
-        year: 1972
-    },
-    {
-        title:"The Dark Knight",
-        rating: 9.0,
-        image: "download.jpeg",
-        year: 2008
-    },
-    {
-        title: "The Lord of the Rings:The Return of the King",
-        rating: 9.0,
-        image: "download (1).jpeg",
-        year: 2003
-    },
-    {
-        title: "Fight Club",
-        rating: 8.8,
-        image: "download (2).jpeg",
-        year: 1999
-    },
-    {
-        title: "Inception",
-        rating: 8.8,
-        image: "download (3).jpeg",
-        year: 2010,
-    },
-    {
-        title: "se7en",
-        rating: 8.6,
-        image: "download (4).jpeg",
-        year: 1995,
-    },
-];
+const API_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=ac92cce9'; 
+const API_KEY = 'ac92cce9'; // 
+
+
+async function fetchMovies(searchTerm = "top rated") {
+    try {
+        const response = await fetch(`${API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchTerm)}`);
+        const data = await response.json();
+
+        if (data.Response === "True") {
+            return data.Search.map(movie => ({
+                title: movie.Title,
+                rating: "N/A", 
+                image: movie.Poster !== "N/A" ? movie.Poster : "placeholder-image.jpg",
+                year: movie.Year
+            }));
+        } else {
+            console.error("No movies found:", data.Error);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching movies:", error);
+        return [];
+    }
+}
 
 
 function createMovieCard(movie) {
@@ -60,47 +41,18 @@ function createMovieCard(movie) {
     `;
 }
 
-
-function populateMovies() {
+async function populateMovies(searchTerm) {
     const movieGrid = document.getElementById('movieGrid');
+    movieGrid.innerHTML = '<p>Loading...</p>'; 
+    const movies = await fetchMovies(searchTerm);
     movieGrid.innerHTML = movies.map(movie => createMovieCard(movie)).join('');
 }
 
-
-let currentSlide = 0;
-const slides = document.querySelectorAll('.slide');
-
-function showSlide(index) {
-    slides.forEach(slide => slide.classList.remove('active'));
-    slides[index].classList.add('active');
-}
-
-document.querySelector('.next').addEventListener('click', () => {
-    currentSlide = (currentSlide + 1) % slides.length;
-    showSlide(currentSlide);
-});
-
-document.querySelector('.prev').addEventListener('click', () => {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    showSlide(currentSlide);
-});
-
-
 document.getElementById('search').addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
-    const filteredMovies = movies.filter(movie => 
-        movie.title.toLowerCase().includes(searchTerm)
-    );
-    const movieGrid = document.getElementById('movieGrid');
-    movieGrid.innerHTML = filteredMovies.map(movie => createMovieCard(movie)).join('');
+    populateMovies(searchTerm);
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    populateMovies();
-
-    setInterval(() => {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }, 5000);
+    populateMovies(); 
 });
