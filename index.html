@@ -14,7 +14,7 @@
             <div class="logo">MovieDB</div>
             <div class="search-bar">
                 <input type="text" id="search" placeholder="Search movies...">
-                <button><i class="fas fa-search"></i></button>
+                <button id="searchButton"><i class="fas fa-search"></i></button>
             </div>
             <div class="nav-links">
                 <a href="#home">Home</a>
@@ -25,7 +25,7 @@
         </nav>
     </header>
 
-
+    <!-- Hero Slider Section -->
     <section class="hero-slider">
         <div class="slider-container">
             <div class="slide active">
@@ -35,14 +35,13 @@
                     <p>Watch the newest movies and TV shows</p>
                 </div>
             </div>
-            <div class="slide active"></div>
+            <div class="slide">
                 <img src="et00413291-fprcuqagwf-landscape.avif" alt="Movie 2">
                 <div class="slide-content">
-                    <h2>Latest Releases</h2>
-                    <p>Watch the newest movies and TV shows</p>
+                    <h2>Exclusive Hits</h2>
+                    <p>Discover popular and trending titles</p>
                 </div>
             </div>
-
         </div>
         <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
         <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
@@ -52,7 +51,7 @@
     <section class="movies-section">
         <h2>Popular Movies</h2>
         <div class="movie-grid" id="movieGrid">
-    
+            <!-- Movie cards will be dynamically populated -->
         </div>
     </section>
 
